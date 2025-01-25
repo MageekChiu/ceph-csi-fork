@@ -46,6 +46,7 @@ type VolumeOptions struct {
 	RequestName  string
 	NamePrefix   string
 	ClusterID    string
+	FsID         string
 	MetadataPool string
 	// ReservedID represents the ID reserved for a subvolume
 	ReservedID           string
@@ -318,6 +319,11 @@ func NewVolumeOptions(
 		return nil, err
 	}
 
+	opts.FsID, err = opts.conn.GetFSID()
+	if err != nil {
+		return nil, err
+	}
+
 	opts.MetadataPool, err = fs.GetMetadataPool(ctx, opts.FsName)
 	if err != nil {
 		return nil, err
@@ -438,6 +444,11 @@ func NewVolumeOptionsFromVolID(
 
 	fs := core.NewFileSystem(volOptions.conn)
 	volOptions.FsName, err = fs.GetFsName(ctx, volOptions.FscID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	volOptions.FsID, err = volOptions.conn.GetFSID()
 	if err != nil {
 		return nil, nil, err
 	}
@@ -822,6 +833,11 @@ func NewSnapshotOptionsFromID(
 
 	fs := core.NewFileSystem(volOptions.conn)
 	volOptions.FsName, err = fs.GetFsName(ctx, volOptions.FscID)
+	if err != nil {
+		return &volOptions, nil, &sid, err
+	}
+
+	volOptions.FsID, err = volOptions.conn.GetFSID()
 	if err != nil {
 		return &volOptions, nil, &sid, err
 	}

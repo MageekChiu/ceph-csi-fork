@@ -74,7 +74,7 @@ func (m *kernelMounter) mountKernel(
 
 	args := []string{
 		"-t", "ceph",
-		fmt.Sprintf("%s@%s.%s=%s", cr.ID, volOptions.ClusterID, volOptions.FsName, volOptions.RootPath),
+		fmt.Sprintf("%s@%s.%s=%s", cr.ID, volOptions.FsID, volOptions.FsName, volOptions.RootPath),
 		mountPoint,
 	}
 
