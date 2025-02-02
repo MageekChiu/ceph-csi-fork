@@ -72,9 +72,14 @@ func (m *kernelMounter) mountKernel(
 		m.needsModprobe = false
 	}
 
+	fsID, err := volOptions.GetFSID()
+	if err != nil {
+		return fmt.Errorf("failed to get fsID, stop mounting: %w", err)
+	}
+
 	args := []string{
 		"-t", "ceph",
-		fmt.Sprintf("%s@%s.%s=%s", cr.ID, volOptions.FsID, volOptions.FsName, volOptions.RootPath),
+		fmt.Sprintf("%s@%s.%s=%s", cr.ID, fsID, volOptions.FsName, volOptions.RootPath),
 		mountPoint,
 	}
 
@@ -86,7 +91,6 @@ func (m *kernelMounter) mountKernel(
 
 	var (
 		stderr string
-		err    error
 	)
 
 	if volOptions.NetNamespaceFilePath != "" {
