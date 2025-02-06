@@ -89,9 +89,7 @@ func (m *kernelMounter) mountKernel(
 
 	args = append(args, "-o", optionsStr)
 
-	var (
-		stderr string
-	)
+	var stderr string
 
 	if volOptions.NetNamespaceFilePath != "" {
 		_, stderr, err = util.ExecuteCommandWithNSEnter(ctx, volOptions.NetNamespaceFilePath, "mount", args[:]...)
