@@ -693,6 +693,17 @@ func NewVolumeOptionsFromMonitorList(
 		opts.BackingSnapshot = true
 	}
 
+	cr, err := util.NewAdminCredentials(secrets)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer cr.DeleteCredentials()
+
+	err = opts.Connect(cr)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	return &opts, &vid, nil
 }
 
@@ -770,6 +781,17 @@ func NewVolumeOptionsFromStaticVolume(
 
 	if opts.BackingSnapshotID != "" {
 		opts.BackingSnapshot = true
+	}
+
+	cr, err := util.NewAdminCredentials(secrets)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer cr.DeleteCredentials()
+
+	err = opts.Connect(cr)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	return &opts, &vid, nil
